@@ -186,7 +186,7 @@ Make sure everyone sets `EXAMPLE_CLI_GH_TOKEN` in their system as an env and set
 Compile the code
 
 ```
-go build -ldflags "-X main.Version=v0.0.1 -X main.PublicKey=PUBLIC_KEY" -o ./example-cli ./main.go
+go build -ldflags "-X main.Version=v0.0.0 -X main.PublicKey=PUBLIC_KEY" -o ./example-cli ./main.go
 ```
 
 then run the code
@@ -198,7 +198,7 @@ then run the code
 you should be able to see the code is updating and running the code again
 
 ```
-downloading new version (v0.0.2)...done
+downloading new version (v0.0.1)...done
 running new version...
 Version
 args: [/Users/ali/Documents/ali/projects/example-cli/example-cli-downloaded]
