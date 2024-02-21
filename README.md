@@ -67,10 +67,12 @@ import (
 	"selfupdate.blockthrough.com"
 )
 
-const (
-	Version   = "v0.0.1"
-	PublicKey = "fa7bdd9d28025900103bf9f90d6292c0130d98e9712c4290deb98b1e81ab9e96"
+var (
+	Version   = ""
+	PublicKey = ""
+)
 
+const (
 	ownerName = "alinz"
 	repoName  = "example-cli"
 	execName  = "example-cli"
@@ -80,7 +82,7 @@ func main() {
 	runUpdate()
 
 	// this is the rest of your main function
-    // ...
+  // ...
 }
 
 func runUpdate() {
