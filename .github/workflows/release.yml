@@ -1,0 +1,61 @@
+name: Build and Release
+on:
+  push:
+    tags:
+      - "v*"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      EXAMPLE_CLI_OWNER: alinz
+      EXAMPLE_CLI_REPO: example-cli
+      EXAMPLE_CLI_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      EXAMPLE_CLI_PRIVATE_KEY: ${{ secrets.EXAMPLE_CLI_SELFUPDATE_PRIVATE_KEY }}
+      EXAMPLE_CLI_PUBLIC_KEY: ${{ secrets.EXAMPLE_CLI_SELFUPDATE_PUBLIC_KEY }}
+      EXAMPLE_CLI_VERSION: ${{ github.ref_name }}
+
+    steps:
+      - name: Setup Go 1.22
+        uses: actions/setup-go@v3
+        with:
+          go-version: ^1.22
+
+      - name: Setup Repo
+        uses: actions/checkout@v3
+
+      - name: Install latest selfupdate cli
+        run: go install selfupdate.blockthrough.com/cmd/selfupdate@latest
+
+      - name: Create a Release
+        run: |
+          selfupdate github release \
+          --owner ${{ env.EXAMPLE_CLI_OWNER }} \
+          --repo ${{ env.EXAMPLE_CLI_REPO }} \
+          --version ${{ env.EXAMPLE_CLI_VERSION }} \
+          --title ${{ env.EXAMPLE_CLI_VERSION }} \
+          --token ${{ env.EXAMPLE_CLI_GH_TOKEN }}
+
+      - name: Build Darwin arm64
+        run: |
+          GOOS=darwin GOARCH=arm64 go build \
+          -ldflags "-X main.Version=${{ env.EXAMPLE_CLI_VERSION }} -X main.PublicKey=${{ env.EXAMPLE_CLI_PUBLIC_KEY }}" \
+          -o ./example-cli-darwin-arm64 \
+          ./main.go
+
+      - name: Upload Darwin arm64
+        run: |
+          selfupdate github upload \
+          --owner blockthrough \
+          --repo selfupdate.go \
+          --filename example-cli-darwin-arm64.sign \
+          --version ${{ env.EXAMPLE_CLI_VERSION }} \
+          --token ${{ env.EXAMPLE_CLI_GH_TOKEN }} \
+          --key ${{ env.EXAMPLE_CLI_PRIVATE_KEY }} < ./example-cli-darwin-arm64
+
+          selfupdate github upload \
+          --owner blockthrough \
+          --repo selfupdate.go \
+          --filename example-cli-darwin-arm64 \
+          --version ${{ env.EXAMPLE_CLI_VERSION }} \
+          --token ${{ env.EXAMPLE_CLI_GH_TOKEN }} < ./example-cli-darwin-arm64
