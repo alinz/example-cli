@@ -1,5 +1,7 @@
 # STEPS
 
+> Make sure to fork this repo first as you need to configure some settings
+
 # Step 1
 
 get self-update library using
@@ -66,8 +68,8 @@ import (
 )
 
 const (
-	Version   = ""
-	PublicKey = ""
+	Version   = "v0.0.1"
+	PublicKey = "fa7bdd9d28025900103bf9f90d6292c0130d98e9712c4290deb98b1e81ab9e96"
 
 	ownerName = "alinz"
 	repoName  = "example-cli"
@@ -119,6 +121,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions: write-all
 
     env:
       EXAMPLE_CLI_OWNER: alinz
@@ -177,3 +180,26 @@ jobs:
 # Step 8
 
 Make sure everyone sets `EXAMPLE_CLI_GH_TOKEN` in their system as an env and sets it to the fine-grain token which was described in `Step 5`
+
+# Step 9
+
+Compile the code
+
+```
+go build -ldflags "-X main.Version=v0.0.1 -X main.PublicKey=PUBLIC_KEY" -o ./example-cli ./main.go
+```
+
+then run the code
+
+```
+./example-cli
+```
+
+you should be able to see the code is updating and running the code again
+
+```
+downloading new version (v0.0.2)...done
+running new version...
+Version
+args: [/Users/ali/Documents/ali/projects/example-cli/example-cli-downloaded]
+```

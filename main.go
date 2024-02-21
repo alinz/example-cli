@@ -8,7 +8,7 @@ import (
 	"selfupdate.blockthrough.com"
 )
 
-const (
+var (
 	Version   = ""
 	PublicKey = ""
 
@@ -34,7 +34,7 @@ func runUpdate() {
 	// "Create a Fine-Grained Personal Access Tokens" in README.md
 	ghToken, ok := os.LookupEnv("EXAMPLE_CLI_GH_TOKEN")
 	if !ok {
-		fmt.Fprintf(os.Stderr, "Warning: EXAMPLE_CLI_GH_TOKEN env is not set, selfupdating is disabled")
+		fmt.Fprintf(os.Stderr, "Warning: EXAMPLE_CLI_GH_TOKEN env is not set, selfupdating is disabled\n")
 		return
 	}
 
