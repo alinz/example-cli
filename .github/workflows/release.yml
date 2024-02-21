@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    permissions: write-all
     env:
       EXAMPLE_CLI_OWNER: alinz
       EXAMPLE_CLI_REPO: example-cli
